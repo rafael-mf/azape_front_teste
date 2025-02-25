@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../services/api.js';
+import { useAuth } from '../../context/AuthContext'
 import './Login.css';
 
 const Login = () => {
@@ -11,6 +12,7 @@ const Login = () => {
   const togglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
   };
+  const { login: authLogin } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -18,11 +20,16 @@ const Login = () => {
       setError('Por favor, preencha todos os campos.');
       return;
     }
+
     try {
       const response = await login(email, password);
-      localStorage.setItem('token', response.data.token);
 
       if (response.status) {
+        const { token, profile } = response.data; 
+
+        authLogin(token, profile); 
+        localStorage.setItem("user", JSON.stringify(profile));
+
         navigate('/dashboard');
       } else {
         setError('Credenciais inválidas.');
@@ -32,48 +39,53 @@ const Login = () => {
     }
   };
 
+
   return (
     <div className="login-container">
-  <div className="login-left">
-    <img src="/az_suite_logo.png" alt="Logo Az Suite" />
-    {error && <p>{error}</p>}
-    <div className="input-container">
-      <div className="div-input">
-        <label>E-mail</label>
-        <input
-          type="email"
-          placeholder="seuemail@exemplo.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
-      <div className="div-input">
-        <label>Senha</label>
-        <div className="input-wrapper">
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <i
-            className={`fa ${showPassword ? "fa regular fa-eye-slash" : "fa regular fa-eye"} password-toggle-icon`}
-            onClick={togglePasswordVisibility}
-          />
+      <div className="login-left">
+        <img src="/az_suite_logo.png" alt="Logo Az Suite" />
+        {error && <p>{error}</p>}
+        <div className="input-container">
+          <div className="div-input">
+            <label>E-mail</label>
+            <input
+              type="email"
+              placeholder="seuemail@exemplo.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="div-input">
+            <label>Senha</label>
+            <div className="input-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <span
+                className="material-icons password-toggle-icon"
+                onClick={togglePasswordVisibility}>
+                {showPassword ? 'visibility_off' : 'visibility'}
+              </span>
+            </div>
+          </div>
+          <div className="esqueci-senha-label div-input">
+            <a href="/">Esqueci a senha</a>
+          </div>
+          <div className="div-input">
+            <button onClick={handleLogin}>Entrar</button>
+          </div>
         </div>
       </div>
-      <div className="esqueci-senha-label div-input">
-        <a href="/">Esqueci a senha</a>
+      <div className="login-right">
+        <img src="/login_right.png" alt="Background Login" />
       </div>
-      <div className="div-input">
-        <button onClick={handleLogin}>Entrar</button>
+      <div className="footer-login">
+        ® Desenvolvido por Azape
       </div>
     </div>
-  </div>
-  <div className="login-right">
-    <img src="/login_right.png" alt="Background Login" />
-  </div>
-</div>
 
   );
 };

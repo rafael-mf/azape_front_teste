@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import Card from '../Card/Card';
-import OrderList from '../OrderList/OrderList';
+import Card from './components/Card/Card';
+import OrderList from './components/OrderList/OrderList';
 import { getDashboardData } from '../../services/api';
 
 const Dashboard = () => {
   const [data, setData] = useState(null);
   const [page, setPage] = useState(1);
-  const limit = 5; // Define quantos pedidos por página
+  const limit = 5; 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,7 +16,7 @@ const Dashboard = () => {
     };
 
     fetchData();
-  }, [page]); // Atualiza quando a página muda
+  }, [page]); 
 
   if (!data) return <div>Carregando...</div>;
 
