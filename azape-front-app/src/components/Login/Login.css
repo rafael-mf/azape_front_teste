@@ -1,0 +1,102 @@
+.login-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.login-left {
+    flex: 1;
+    padding: 20px;
+    margin-top: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--background-color);
+}
+
+.login-left label {
+    size: 14px;
+    color: var(--primary-color);
+    font-weight: bolder;
+}
+
+.login-left a {
+    size: 12px;
+    color: var(--primary-color);
+    font-weight: bolder;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.div-input {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-container input {
+    border: var(--border-color) 1px solid;
+    border-width: 1px;
+    border-radius: 8px;
+}
+
+.login-left img {
+    width: 160px;
+    height: 68px;
+}
+
+.login-left input {
+    margin: 10px 0;
+    padding: 10px;
+    width: 250px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+}
+
+.login-left button {
+    padding: 10px 20px;
+    width: 100%;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-left button:hover {
+    background-color: var(--accent-color);
+}
+
+.login-right {
+    width: 50%;
+    height: 100vh;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-right img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--text-color);
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
