@@ -1,0 +1,21 @@
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 250px;
+    width: calc(100% - 250px);
+    background-color: var(--background-alt-color);
+    color: var(--text-color-light);
+    text-align: left;
+    padding: 10px 20px;
+    z-index: 999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+}
+
+
+.footer img {
+    width: 24.73px;
+}

@@ -1,4 +1,5 @@
 import React from 'react';
+import './Topbar.css';
 import { useAuth } from "../../../context/AuthContext";
 
 const Topbar = () => {

@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600&display=swap');
 
 :root {
-    --primary-color: #FE7C6E;
+    --primary-color: #FE877A;
     --secondary-color: white;
-    --accent-color: #fd6a5a;
+    --accent-color: #FE7C6E;
     --background-color: white;
     --text-color: #59666F;
     --text-color-light: #97A1A8;
@@ -37,60 +37,6 @@ a {
     text-decoration: none;
     color: inherit;
 }
-
-.sidebar {
-    width: 250px;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 0;
-    padding: 20px;
-    z-index: 1000;
-    box-shadow: 2px 0px 4px 0px #0000000D;
-
-}
-
-.sidebar-logo {
-    display: flex;
-    margin-bottom: 15px;
-    justify-content: center;
-}
-
-.sidebar-logo img {
-    width: 120px;
-    margin-bottom: 20px;
-}
-
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-}
-
-.sidebar ul li {
-    margin: 20px 0;
-}
-
-.sidebar ul li a {
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-}
-
-.sidebar button {
-    padding: 10px 20px;
-    width: 100%;
-    justify-content: left;
-    align-items: center;
-    display: flex;
-    background-color: var(--primary-color);
-    color: var(--secondary-color);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
 .content-area {
     margin-left: 250px;
     padding: 20px;
@@ -102,98 +48,9 @@ a {
     min-height: calc(100vh - 60px);
 }
 
-.topbar {
-    width: calc(100% - 250px);
-    height: 80px;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    padding: 0 20px;
-    position: fixed;
-    top: 0;
-    left: 250px;
-    z-index: 999;
-    box-shadow: 0px 2px 4px 0px #0000000D;
-}
-
-.topbar-content {
-    display: flex;
-    justify-content: flex-end; 
-    align-items: center; 
-    width: 100%;
-    gap: 55px;
-  }
-
-.topbar .profile-info {
-    display: flex;
-    justify-content: s;
-    align-items: center;
-}
-
-.topbar .perfil-icone{
-    margin-left: 16px;
-    background-color: var(--primary-color);
-    color: var(--secondary-color);
-    font-size: 20px !important;
-    width: 40px;
-    height: 40px;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    border-radius: 20px;
-}
-
-.footer {
-    position: fixed;
-    bottom: 0;
-    left: 250px;
-    width: calc(100% - 250px);
-    background-color: var(--background-alt-color);
-    color: var(--text-color-light);
-    text-align: left;
-    padding: 10px 20px;
-    z-index: 999;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 60px;
-}
-
-
-.footer img {
-    width: 24.73px;
-}
-
 main {
-    padding-top: 60px;
+    padding-top: 24px;
+    padding-left: 40px;
     flex-grow: 1;
     padding-bottom: 60px;
-}
-
-.pagination {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-}
-
-.pagination button {
-    padding: 5px 10px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.pagination button:disabled {
-    background-color: var(--border-color);
-    cursor: not-allowed;
-}
-
-.cards {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
 }
