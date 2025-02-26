@@ -16,6 +16,7 @@ const paymentStatus = {
   'succeeded': 'Realizado',
   'processing': 'Em processamento',
   'canceled': 'Cancelado',
+  'Aprovada': 'Aprovado',
 };
 
 const paymentMethod = {
@@ -24,7 +25,6 @@ const paymentMethod = {
   'pix': 'PIX',
   'boleto': 'Boleto',
 };
-
 
 const formatCurrency = (value) => {
   if (!value && value !== 0) return '0,00';
@@ -47,8 +47,8 @@ const OrderList = ({ orders, isLoading }) => (
           <th className="truncate">Criação</th>
           <th className="truncate">Nome do cliente</th>
           <th className="truncate">CPF/CNPJ do cliente</th>
-          <th className="truncate">Status do pedido</th>
-          <th className="truncate">Status do pagamento</th>
+          <th className="truncate status-col">Status do pedido</th>
+          <th className="truncate status-col">Status do pagamento</th>
           <th className="truncate">Método de pagamento</th>
           <th className="truncate text-right">Total</th>
         </tr>
@@ -69,7 +69,16 @@ const OrderList = ({ orders, isLoading }) => (
         ) : (
           orders.map((order) => (
             <tr key={order._id}>
-              <td className="truncate">#{order._id}</td>
+              <td className="truncate">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  #{order._id}
+                  {(order.refund || order.replacement_product) && (
+                    <div className='refund'>
+                      <span className="material-icons" style={{ color: 'white', fontSize: '16px' }}>cached</span>
+                    </div>
+                  )}
+                </div>
+              </td>
               <td className="truncate">#{order.order_seller_id}</td>
               <td className="truncate">
                 {new Date(order.createdAt).toLocaleDateString('pt-BR', {
@@ -80,18 +89,20 @@ const OrderList = ({ orders, isLoading }) => (
               </td>
               <td className="truncate">{order.customer?.name || 'N/A'}</td>
               <td className="truncate">{formatCPForCNPJ(order.customer?.doc)}</td>
-              <td className="truncate">
+              <td className="truncate status-col">
                 {orderStatus[order.status] || order.status}
               </td>
-              <td className="truncate">
+              <td className="truncate status-col">
                 {paymentStatus[order.payment?.status] || order.payment?.status || 'N/A'}
               </td>
               <td className="truncate">
                 {paymentMethod[order.payment?.method] || order.payment?.method || 'N/A'}
               </td>
               <td className="truncate">
-                <span style={{ alignSelf: "start" }}>R$</span>
-                {formatCurrency(order.payment?.amount)}
+                <div style={{ display: "flex" }}>
+                  <span>R$</span>
+                  <span style={{ flexGrow: "1" }}>{formatCurrency(order.payment?.amount)}</span>
+                </div>
               </td>
             </tr>
           ))

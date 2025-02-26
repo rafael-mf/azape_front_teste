@@ -10,7 +10,7 @@
 table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
+  table-layout: auto;
 }
 
 thead {
@@ -43,6 +43,7 @@ tbody td {
   border-bottom: 1px solid #e0e0e0;
   padding: 12px 15px;
   color: #333;
+  white-space: nowrap;
 }
 
 tbody tr:last-child td {
@@ -69,6 +70,43 @@ td:last-child {
   font-weight: 500;
 }
 
+th:nth-child(1) {
+  width: 150px;
+}
+
+th:nth-child(2) {
+  width: 130px;
+}
+
+th:nth-child(3) {
+  width: 120px;
+}
+
+th:nth-child(4) {
+  width: 200px;
+}
+
+th:nth-child(5) {
+  width: 180px;
+}
+
+th:nth-child(6) {
+  width: 160px;
+}
+
+th:nth-child(7) {
+  width: 160px;
+}
+
+th:nth-child(8) {
+  width: 150px;
+}
+
+th:nth-child(9) {
+  width: 100px;
+  text-align: right;
+}
+
 td.truncate,
 th.truncate {
   white-space: nowrap;
@@ -76,9 +114,12 @@ th.truncate {
   text-overflow: ellipsis;
 }
 
-.truncate {
-  max-width: 150px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.refund {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
