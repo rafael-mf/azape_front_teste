@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Card from "./components/Card/Card";
 import OrderList from "./components/OrderList/OrderList";
 import { getDashboardData } from "../../services/api";
@@ -12,11 +12,14 @@ const formatCurrency = (value) => {
 };
 
 const Dashboard = () => {
-  const [data, setData] = useState(null);
+  const [summaryData, setSummaryData] = useState(null);
+  const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
+  const initialLoadComplete = useRef(false);
+  const [tableLoading, setTableLoading] = useState(false);
 
   const calculatePageRange = () => {
     let start = Math.max(1, page - 2);
@@ -29,7 +32,7 @@ const Dashboard = () => {
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   };
 
-  const fetchData = useCallback(async () => {
+  const fetchInitialData = useCallback(async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
@@ -37,7 +40,15 @@ const Dashboard = () => {
 
       const response = await getDashboardData(token, page, limit);
 
-      setData(response.data);
+      setSummaryData({
+        orders_count: response.data.orders_count,
+        sales_count: response.data.sales_count,
+        sales_total: response.data.sales_total,
+        orders_total: response.data.orders_total,
+        average_ticket: response.data.average_ticket
+      });
+
+      setOrders(response.data.orders);
       const newTotalPages = response.data.total_pages;
       setTotalPages(newTotalPages);
 
@@ -45,6 +56,7 @@ const Dashboard = () => {
         setPage(newTotalPages > 0 ? newTotalPages : 1);
       }
 
+      initialLoadComplete.current = true;
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
     } finally {
@@ -52,9 +64,41 @@ const Dashboard = () => {
     }
   }, [page, limit]);
 
+  const fetchTableData = useCallback(async () => {
+    try {
+      setTableLoading(true);
+      setOrders([]);
+
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Token não encontrado");
+
+      const response = await getDashboardData(token, page, limit);
+
+      setOrders(response.data.orders);
+      const newTotalPages = response.data.total_pages;
+      setTotalPages(newTotalPages);
+
+      if (page > newTotalPages) {
+        setPage(newTotalPages > 0 ? newTotalPages : 1);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar dados da tabela:", error);
+    } finally {
+      setTableLoading(false);
+    }
+  }, [page, limit]);
+
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (!initialLoadComplete.current) {
+      fetchInitialData();
+    }
+  }, [fetchInitialData]);
+
+  useEffect(() => {
+    if (initialLoadComplete.current) {
+      fetchTableData();
+    }
+  }, [page, limit, fetchTableData]);
 
   const handleLimitChange = (newLimit) => {
     setLimit(newLimit);
@@ -62,24 +106,24 @@ const Dashboard = () => {
   };
 
   if (loading) return <div>Carregando...</div>;
-  if (!data) return <div>Nenhum dado encontrado</div>;
+  if (!summaryData) return <div>Nenhum dado encontrado</div>;
 
   const cardsData = [
     {
-      title: `${data.orders_count} Pedidos`,
-      value: formatCurrency(data.orders_total),
+      title: `${summaryData.orders_count} Pedidos`,
+      value: formatCurrency(summaryData.orders_total),
       icon: "contract",
       color: "#F4C8E1",
     },
     {
-      title: `${data.sales_count} Vendas`,
-      value: formatCurrency(data.sales_total),
+      title: `${summaryData.sales_count} Vendas`,
+      value: formatCurrency(summaryData.sales_total),
       icon: "paid",
       color: "#B6EEDD",
     },
     {
       title: "Ticket Médio",
-      value: formatCurrency(data.average_ticket),
+      value: formatCurrency(summaryData.average_ticket),
       icon: "calculate",
       color: "#C3E7F3",
     },
@@ -97,65 +141,66 @@ const Dashboard = () => {
         ))}
       </div>
 
-      <OrderList orders={data.orders} />
+      <OrderList orders={orders} isLoading={tableLoading} />
 
       <div className="pagination">
-        <span
-          className="material-symbols-outlined"
-          onClick={() => setPage(1)}
-          style={{
-            cursor: "pointer",
-            opacity: page === 1 ? 0.5 : 1
-          }}
-        >
-          keyboard_double_arrow_left
-        </span>
-
-        <span
-          className="material-symbols-outlined"
-          onClick={() => page > 1 && setPage(page - 1)}
-          style={{
-            cursor: "pointer",
-            opacity: page === 1 ? 0.5 : 1
-          }}
-        >
-          chevron_left
-        </span>
-
-        {pageRange.map((p) => (
-          <button
-            key={p}
-            className={`btn-pagina ${page === p ? "btn-pagina-selected" : ""}`}
-            onClick={() => setPage(p)}
+        <div className="page-list">
+          <span
+            className="material-symbols-outlined"
+            onClick={() => setPage(1)}
+            style={{
+              cursor: "pointer",
+              opacity: page === 1 ? 0.5 : 1
+            }}
           >
-            {p}
-          </button>
-        ))}
+            keyboard_double_arrow_left
+          </span>
 
-        <span
-          className="material-symbols-outlined"
-          onClick={() => page < totalPages && setPage(page + 1)}
-          style={{
-            cursor: "pointer",
-            opacity: page === totalPages ? 0.5 : 1
-          }}
-        >
-          chevron_right
-        </span>
+          <span
+            className="material-symbols-outlined"
+            onClick={() => page > 1 && setPage(page - 1)}
+            style={{
+              cursor: "pointer",
+              opacity: page === 1 ? 0.5 : 1
+            }}
+          >
+            chevron_left
+          </span>
 
-        <span
-          className="material-symbols-outlined"
-          onClick={() => setPage(totalPages)}
-          style={{
-            cursor: "pointer",
-            opacity: page === totalPages ? 0.5 : 1
-          }}
-        >
-          keyboard_double_arrow_right
-        </span>
+          {pageRange.map((p) => (
+            <button
+              key={p}
+              className={`btn-pagina ${page === p ? "btn-pagina-selected" : ""}`}
+              onClick={() => setPage(p)}
+            >
+              {p}
+            </button>
+          ))}
 
-        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span>{page} de {totalPages} páginas</span>
+          <span
+            className="material-symbols-outlined"
+            onClick={() => page < totalPages && setPage(page + 1)}
+            style={{
+              cursor: "pointer",
+              opacity: page === totalPages ? 0.5 : 1
+            }}
+          >
+            chevron_right
+          </span>
+
+          <span
+            className="material-symbols-outlined"
+            onClick={() => setPage(totalPages)}
+            style={{
+              cursor: "pointer",
+              opacity: page === totalPages ? 0.5 : 1
+            }}
+          >
+            keyboard_double_arrow_right
+          </span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ paddingInline: "15px" }}>{page} de {totalPages} páginas</span>
 
           <div>
             <label>Linhas por página</label>

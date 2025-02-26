@@ -4,12 +4,13 @@
     flex-direction: column;
     padding-bottom: 24px;
     padding-left: 24px;
-    width: 360px;
+    min-width: 360px;
     height: 174px;
     background-color: var(--secondary-color);
     margin-right: 16px;
     box-shadow: 0px 2px 4px 0px #0000000D;
     border-radius: 8px;
+    flex-grow: 1;
 }
 
 .item-card{

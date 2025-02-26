@@ -1,30 +1,42 @@
 .cards {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     margin-top: 49px;
     margin-bottom: 60px;
 }
 
 .pagination {
-    display: flex;
+    display: inline-flex;
+    width: 100%;
     justify-content: space-between;
     background-color: var(--background-alt-color);
     padding: 10px 0;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
 }
 
-.pagination span{
+.pagination .page-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2%;
+    flex-grow: 1;
+}
+
+.page-list span {
     display: flex;
     align-items: center;
     color: var(--primary-color);
 }
 
 .btn-pagina-selected {
-    
+
     padding: 5px 10px;
     width: 32px;
     height: 32px;
     border-radius: 16px;
-    background-color: var(--primary-color);
+    background-color: var(--primary-color) !important;
     color: white !important;
     border: none;
     font-size: 14px;
@@ -37,5 +49,52 @@
     width: 32px;
     height: 32px;
     color: #97A1A8;
+    background-color: var(--background-alt-color);
     border: none;
 }
+
+.pagination select {
+    padding: 8px 24px 8px 12px;
+    margin: 0 10px;
+    border: 1px solid hsl(220, 15%, 85%);
+    border-radius: 8px; 
+    background-color: hsl(220, 15%, 95%);
+    color: hsl(220, 15%, 25%);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236b7280'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px;
+  }
+  
+  .pagination select:hover {
+    border-color: hsl(220, 15%, 75%);
+    background-color: hsl(220, 15%, 92%);
+  }
+  
+  .pagination select:focus {
+    outline: none;
+  }
+  
+  .pagination select option {
+    padding: 8px 12px;
+    background-color: hsl(220, 15%, 98%);
+    color: hsl(220, 15%, 25%);
+    border-bottom: 1px solid hsl(220, 15%, 90%);
+  }
+  
+  .pagination select option:hover {
+    background-color: hsl(220, 50%, 90%) !important;
+  }
+  
+  .pagination select option:checked {
+    background-color: hsl(220, 50%, 85%);
+    color: hsl(220, 15%, 25%);
+  }
